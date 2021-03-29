@@ -1,4 +1,35 @@
-/*Seed file from Excel for future reference - this is on the schema file to reset the database
+DROP DATABASE if EXISTS employeemanagement;
+CREATE DATABASE employeemanagement;
+
+USE employeemanagement;
+
+CREATE TABLE department (
+    deptid INT PRIMARY KEY,
+    deptname VARCHAR(30) NOT NULL
+);
+CREATE TABLE role (
+    roleid INT NOT NULL PRIMARY KEY,
+    roletitle VARCHAR(60) NOT NULL,
+    rolesalary DECIMAL NOT NULL,
+    dept_roleid INT NOT NULL,
+    FOREIGN KEY (dept_roleid)
+        REFERENCES department (deptid)
+        ON DELETE CASCADE
+);
+    
+CREATE TABLE employee (
+    empid INT UNIQUE PRIMARY KEY,
+    firstname VARCHAR(60) NOT NULL,
+    lastname VARCHAR(60) NOT NULL,
+    roleid INT,
+    managerid INT,
+    FOREIGN KEY (roleid)
+        REFERENCES role (roleid)
+        ON DELETE CASCADE,
+    FOREIGN KEY (managerid)
+        REFERENCES employee (empid)
+);
+
 
 INSERT INTO department VALUES(1,"StuApps");
 INSERT INTO department VALUES(2,"BusApps");
