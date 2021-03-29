@@ -1,19 +1,15 @@
-const db = require('db')
-db.connect ({
-    host: process.env.DB_HOST,
-    username: process.env.DB_USER,
-    password: process.env.DB_PASS
-})
 
 const util = require('util');
 const mysql = require ('mysql');
 const connection = mysql.createConnection({
     host: "localhost",
-    user: "root",
-    //password: 
+    user: "DevJulia",
+    password: "5jkhxtu2",
+    database: "employeemanagement"
 });
 
-connection.connect();
+connection.connect(
+    console.log(`connected as id ${connection.threadId}\n`));
 
 connection.query = util.promisify(connection.query);
 
