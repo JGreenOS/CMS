@@ -1,0 +1,27 @@
+{
+  "name": "cmsemployee",
+  "version": "1.0.0",
+  "description": "Content Management System using MySQL",
+  "main": "index.js",
+  "dependencies": {
+    "asciiart-logo": "^0.2.6",
+    "console.table": "^0.10.0",
+    "inquirer": "^8.0.0",
+    "mysql": "^2.18.1",
+    "node": "^15.12.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JGreenOS/CMS.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JGreenOS/CMS/issues"
+  },
+  "homepage": "https://github.com/JGreenOS/CMS#readme"
+}
