@@ -1,18 +1,32 @@
-const connection = require('./connection');
+// const connection = require('./connection.js');
 
-class DB { 
-    constructor(connection) {
-   this.connection = connection;
+const util = require("util");
+const mysql = require("mysql");
+
+const connection = mysql.createConnection({
+    host:'127.0.0.1',
+    username:'root',
+    password:'5jkhxtu2',
+    database:'employeemanagement'
+});
+
+
+//connection.query = util.promisify(connection.query);
+
+
+// class DB { 
+//     constructor(connection) {
+//    this.connection = connection;
 
 //find all departments
-findAllDepts() 
-    return this.connection.query
-    ("SELECT department.deptid, department.deptname");
-
+// findAllDepts() {
+//     return this.connection.query(`SELECT * FROM department`);
+// }
 
 //add department
-newDepartment (department) 
-    return this.connection.query("INSERT INTO department SET ?", department);
+newDepartment (department) {
+    return this.connection.query('INSERT INTO department SET ?', department);
+}
 
 //remove department
 delDepartment (deptid) 
@@ -28,10 +42,10 @@ newEmployee(employee)
 return this.connection.query("INSERT INTO employee SET ?", employee);
 
 //remove employee and use id!
-delEmployee(empid) 
+delEmployee(empid) {
  return this.connection.query("DELETE FROM employee WHERE empid = ?", empid);
 
-};
+}
 
 //update managers
 
@@ -52,5 +66,5 @@ delEmployee(empid)
 
 
 //keeps connection open!
-}
-module.exports = new DB(connection)
+
+// module.exports = new DB(connection)
