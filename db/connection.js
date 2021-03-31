@@ -1,17 +1,21 @@
+const util = require("util");
+const mysql = require("mysql");
 
-const util = require('util');
-const mysql = require ('mysql');
 const connection = mysql.createConnection({
     host: "localhost",
-    user: "DevJulia",
-    password: "5jkhxtu2",
+    username: "DevJulia",
+    password: "s1p2a3r4k5y6**g00b3r$",
     database: "employeemanagement"
 });
 
 connection.connect(
-    console.log(`connected as id ${connection.threadId}\n`));
+    console.log(`connected as id ${connection.threadId}\n`)
+);
 
 connection.query = util.promisify(connection.query);
 
 module.exports = connection;
+
+
+
 
