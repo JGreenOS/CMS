@@ -1,91 +1,22 @@
-const { prompt } = require("inquirer");
-const logo = require("asciiart-logo");
-const db = require("./db");
-const { exit } = require("node:process");
-require ("console.table");
+const db = require("./db_main");
 
-init ();
-
-function init() {
-const logoText = logo ( { name: "Employee Management System"}).render();
-console.log(logoText);
-
-loadMenu();
-}
 
 //inquirer package
-function loadMenu () {
-    const { choice } await prompt([
+//add department
+async function addDepartment() {
+    const department = await prompt([
         {
-            type: "list",
-            name: "choice",
-            messsage: "Select an action",
-            choices: [
-               {
-                   name: "View All Departments",
-                   value: "VIEW_DEPTS"
-               },
-               {
-                   name: "View All Roles",
-                   value: "VIEW_ROLES"
-               },
+            name: "name",
+            message: "Enter the full name of the new department"
+        }
+    ]);
 
-
-{
-name: "View All Employees",
-value: "VIEW_ALLEMPLOYEES"
-
-},
-
-                {
-
-        
-                    name: "Add Department",
-                    value: "ADD_DEPT"
-                },
-                {
-                    name: "Remove Department",
-                    value: "DELETE_DEPT"
-
-                },
-
-                {
-                    name: "Add Roles",
-                    value: "ADD_ROLES"
-                },
-
-                {
-                    name: "Delete Roles - be careful this can make a mess",
-                    value: "DELETE_ROLES"
-                },
-                {
-                name: "Add Employee",
-                value: "ADD_EMPLOYEE"
-                }, 
-                {
-                name: "Remove Employee",
-                value: "DELETE_EMPLOYEE"
-            },
-            {
-                name: ""
-            }
-            {
-                name: "Update Employee Role",
-                value: "UPDATE_ROLE"
-            },
-            {
-                name: "Exit system",
-                value: "EXIT"
-            },
-
-            //close out inquirer here
+    await db.addDepartment(department);
+    console.log(`Added ${department.deptname} to the database`);
 
 
 
-
-
-
-
+//add roles
 //add employees
 //update employee managers
 //view employees by manager
@@ -95,4 +26,4 @@ value: "VIEW_ALLEMPLOYEES"
 
 
 //what to do based on choices (switch statements)
-
+}
