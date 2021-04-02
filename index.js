@@ -11,7 +11,7 @@
 
 const { prompt } = require("inquirer");
 const logo = require("asciiart-logo");
-//const db = require("./db");
+const db = require("./db");
 require ("console.table");
 
 init ();
@@ -83,13 +83,89 @@ async function loadMenu () {
             ]
         }
     ]);
-}                            
+
+    //wire function to the choice
+   switch (choice) {
+       case "VIEW_DEPTS":
+           return findAllDepts();
+           case "VIEW_ROLES":
+           return findAllRoles();
+           case "VIEW_ALL_EMP":
+           return viewEmployees();
+           case "VIEW_EMP_DEPTS":
+           return findByDept();
+           case "VIEW_EMP_MANAGER":
+           return ;
+           case "ADD_DEPT":
+           return ;
+           case "ADD_ROLE":
+           return ;
+           case "ADD_EMPLOYEE":
+           return ;
+           case "DELETE_DEPTS":
+           return ;
+           case "DELETE_ROLES":
+            return;
+            case "DELETE_EMPLOYEE":
+            return;
+           default:
+                return goodbye();
+   }
+        
+    };
+                          
     
-    //close out main prompts, next build switch statements
+
+
+ 
 //****
 //View All Departments
+async function findAllDepts () {
+const departments = await db.findAllDepts();
+
+const deptChoices = departments.map(({ deptid, deptname }) => ({
+    name: deptname,
+    value: deptid
+}));
+
+const { departmentId } = await prompt ([
+    { 
+        type: "list",
+        name: "departmentId",
+        message: "Which department would you like to view?",
+        choices: deptChoices
+        }]);
+
+        const employees = await db.findAllEmployees(departmentId);
+
+        console.log ("\n");
+        console.table(employees);
+
+        loadMenu();
+
+
+}
+
+
 //View All Roles
+
+async function findAllRoles () {
+    const roles = await db.findAllRoles();
+    console
+    console.log("\n");
+    console.table(roles);
+
+    loadMenu();
+}
 //View All Employees
+async function viewEmployees() {
+    const employees = await db.findAllEmployees();
+    console.log("\n");
+    console.table(employees);
+
+    loadMenu();
+}
+
 //View Employees by Manager
 //View Employees by Department
 

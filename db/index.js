@@ -1,27 +1,19 @@
-// const connection = require('./connection.js');
+class DB { 
+   constructor(connection) {
+   this.connection = connection;
+   }
 
-const util = require("util");
-const mysql = require("mysql");
+findAllDepts() {
+return this.connection.query(`SELECT * FROM department`);
+}
 
-const connection = mysql.createConnection({
-    host:'127.0.0.1',
-    username:'root',
-    password:'5jkhxtu2',
-    database:'employeemanagement'
-});
-
-
-//connection.query = util.promisify(connection.query);
-
-
-// class DB { 
-//     constructor(connection) {
-//    this.connection = connection;
-
-//find all departments
-// findAllDepts() {
-//     return this.connection.query(`SELECT * FROM department`);
-// }
+findAllEmployees() {
+return this.connection.query(`SELECT employee.empid, employee.firstname, employee.lastname, role.roletitle, department.deptname FROM employee JOIN
+role ON employee.emp_roleid = role.roleid JOIN department ON department.deptid = role.dept_id`)
+}
+findAllRoles() {
+    return this.connection.query(`SELECT * FROM role`);
+}
 
 //add department
 newDepartment (department) {
@@ -29,17 +21,18 @@ newDepartment (department) {
 }
 
 //remove department
-delDepartment (deptid) 
+delDepartment (deptid)  {
  return this.connection.query("DELETE FROM department WHERE deptid = ?", deptid)
-
+}
 
 //add role
-newRole(role) 
+newRole(role) {
     return this.connection.query("INSERT INTO role set ?", role);
-
+}
 //add employee
-newEmployee(employee) 
+newEmployee(employee) {
 return this.connection.query("INSERT INTO employee SET ?", employee);
+}
 
 //remove employee and use id!
 delEmployee(empid) {
@@ -63,8 +56,11 @@ delEmployee(empid) {
 
 
 //view total salary budget for a specific department
+findByDept()
+{
+    return this.connection.query(`SELECT employee.empid, employee.firstname, employee.lastname, role.roletitle FROM employee LEFT JOIN role on employee.emp_roleid = roleid LEFT JOIN department on role.dept_id = department.deptid WHERE department.deptid = ?`,
+    deptid);
+}
 
-
-//keeps connection open!
-
-// module.exports = new DB(connection)
+}
+module.exports = new DB(require('./connection'))
