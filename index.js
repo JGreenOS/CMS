@@ -87,37 +87,32 @@ async function loadMenu () {
     //wire function to the choice
    switch (choice) {
        case "VIEW_DEPTS":
-           return findAllDepts();
-           case "VIEW_ROLES":
-           return findAllRoles();
-           case "VIEW_ALL_EMP":
-           return viewEmployees();
-           case "VIEW_EMP_DEPTS":
-           return findByDept();
-           case "VIEW_EMP_MANAGER":
-           return ;
-           case "ADD_DEPT":
-           return newDepartment();
-           case "ADD_ROLE":
-           return newRole();
-           case "ADD_EMPLOYEE":
-           return addEmployee();
-           case "DELETE_DEPTS":
-           return ;
-           case "DELETE_ROLES":
-            return;
-            case "DELETE_EMPLOYEE":
-            return;
-           default:
-                return goodbye();
-   }
-        
+        return findAllDepts();
+        case "VIEW_ROLES":
+        return findAllRoles();
+        case "VIEW_ALL_EMP":
+        return viewEmployees();
+        case "VIEW_EMP_DEPTS":
+        return findByDept();
+        case "VIEW_EMP_MANAGER":
+        return ;
+        case "ADD_DEPT":
+        return newDepartment();
+        case "ADD_ROLE":
+        return newRole();
+        case "ADD_EMPLOYEE":
+        return addEmployee();
+        case "DELETE_DEPT":
+        return deleteDepartment();
+        case "DELETE_ROLES":
+        return;
+        case "DELETE_EMPLOYEE":
+        return deleteEmployee();
+        default:
+            return goodbye();
+   }       
     };
                           
-    
-
-
- 
 //****
 //View All Departments
 async function findAllDepts () {
@@ -143,12 +138,9 @@ const { departmentId } = await prompt ([
 
         loadMenu();
 
-
 }
 
-
 //View All Roles
-
 async function findAllRoles () {
     const roles = await db.findAllRoles();
     console.log("\n");
@@ -164,8 +156,8 @@ async function viewEmployees() {
 
     loadMenu();
 }
-
 //View Employees by Manager
+
 //View Employees by Department
 
 
@@ -178,15 +170,55 @@ async function viewEmployees() {
  
 //********************
  //Delete Department
+async function deleteDepartment() {
+    const departments = await db.findAllDepts();
+    const deptChoices = departments.map(({ deptid, deptname }) => ({
+        name: deptname,
+        value: deptid
+    }));
+    
+const { departmentId } = await prompt (
+        { 
+            type: "list",
+            name: "deptid",
+            message: "Which department would you like to delete WARNING - this will remove roles and employees!",
+            choices: deptChoices
+            });
+        
+await db.delDepartment1(departmentId);
+
+       console.log(`Removed department from the system`);
+
+       loadMenu();
+    }
+
  
  //************
  //Delete Roles
 
  //***********
  //Delete Employees
+async function deleteEmployee() {
+const employee = await db.findAllEmployees();
+const employeeList = employee.map(({ empid, firstname, lastname }) => ({
+    name: `${firstname}  ${lastname} `,
+    value: empid, 
+}));
 
+const { employeeId } = await prompt ([
+    {
+        type: "list",
+        name: "empid",
+        message: "Select the employee to delete",
+        choices: employeeList
+    }
+]);
 
+ await db.delEmployee(employeeId);
+ console.log(`Removed employee from the system`);
 
+loadMenu();
+}
 //**************
 //Add Department
 async function newDepartment(){
@@ -201,10 +233,6 @@ console.log(`Added ${department.deptname} to the system`);
 
 loadMenu();
  }
-
-
-
-
 //***********************
 //Add Role
 async function newRole(){
@@ -214,7 +242,6 @@ const deptChoices = departments.map(({ deptid, deptname }) => ({
     name: deptname,
     value: deptid
 }));
-
 
     const role = await prompt ([
         { name: "roletitle",
@@ -236,9 +263,6 @@ const deptChoices = departments.map(({ deptid, deptname }) => ({
 
     loadMenu();
 }
-
-
-
 //*******************************            
 //Add Employee 
 //needs to return roles and all employees
@@ -298,10 +322,6 @@ async function addEmployee() {
 
         loadMenu();
     }
-
-
-
-
 
 function goodbye() {
     console.log("Exited system. You may close this window");

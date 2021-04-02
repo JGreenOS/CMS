@@ -1,3 +1,4 @@
+
 class DB { 
    constructor(connection) {
    this.connection = connection;
@@ -9,8 +10,9 @@ return this.connection.query(`SELECT * FROM department`);
 
 findAllEmployees() {
 return this.connection.query(`SELECT employee.empid, employee.firstname, employee.lastname, role.roletitle, department.deptname FROM employee JOIN
-role ON employee.emp_roleid = role.roleid JOIN department ON department.deptid = role.dept_id`)
+role ON employee.emp_roleid = role.roleid JOIN department ON department.deptid = role.dept_id`);
 }
+
 findAllRoles() {
     return this.connection.query(`SELECT * FROM role`);
 }
@@ -21,8 +23,8 @@ newDepartment (department) {
 }
 
 //remove department
-delDepartment (deptid)  {
- return this.connection.query("DELETE FROM department WHERE deptid = ?", deptid)
+delDepartment1 (deptid)  {
+ return this.connection.query(`DELETE FROM department WHERE deptid = '?'`, deptid);
 }
 
 //add role
@@ -36,7 +38,7 @@ return this.connection.query("INSERT INTO employee SET ?", employee);
 
 //remove employee and use id!
 delEmployee(empid) {
- return this.connection.query("DELETE FROM employee WHERE empid = ?", empid);
+ return this.connection.query("DELETE FROM employee WHERE empid = '?'", empid);
 
 }
 
@@ -46,7 +48,6 @@ delEmployee(empid) {
 //view employee by manager
 
 
-//delete department
 
 
 //delete role
@@ -58,9 +59,8 @@ delEmployee(empid) {
 //view total salary budget for a specific department
 findByDept()
 {
-    return this.connection.query(`SELECT employee.empid, employee.firstname, employee.lastname, role.roletitle FROM employee LEFT JOIN role on employee.emp_roleid = roleid LEFT JOIN department on role.dept_id = department.deptid WHERE department.deptid = ?`,
+    return this.connection.query(`SELECT employee.empid, employee.firstname, employee.lastname, role.roletitle FROM employee LEFT JOIN role on employee.emp_roleid = roleid LEFT JOIN department on role.dept_id = department.deptid WHERE department.deptid = '?'`,
     deptid);
 }
-
 }
 module.exports = new DB(require('./connection'))
