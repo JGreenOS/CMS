@@ -25,8 +25,9 @@ newDepartment (department) {
 //remove department
 delDepartment1 (deptid)  {
  return this.connection.query(`DELETE FROM department WHERE department.deptid = '?'`, deptid);
-}
 
+console.log("deleting department with id: " + deptid)
+}
 //add role
 newRole(role) {
     return this.connection.query("INSERT INTO role set ?", role);

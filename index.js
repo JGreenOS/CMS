@@ -166,7 +166,7 @@ async function deleteDepartment() {
         value: deptid
     }));
     
-const { departmentId } = await prompt (
+const { deptid } = await prompt (
         { 
             type: "list",
             name: "deptname",
@@ -175,7 +175,7 @@ const { departmentId } = await prompt (
             choices: deptChoices
             });
         
-await db.delDepartment1(departmentId);
+await db.delDepartment1(deptid);
 
        console.log(`Removed department from the system`);
        console.log("deletd dept with id:" + deptid);
