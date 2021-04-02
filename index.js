@@ -178,7 +178,7 @@ const { departmentId } = await prompt (
 await db.delDepartment1(departmentId);
 
        console.log(`Removed department from the system`);
-
+       console.log("deletd dept with id:" + deptid);
        loadMenu();
     }
 
