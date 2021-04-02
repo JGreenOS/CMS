@@ -97,11 +97,11 @@ async function loadMenu () {
            case "VIEW_EMP_MANAGER":
            return ;
            case "ADD_DEPT":
-           return ;
+           return newDepartment();
            case "ADD_ROLE":
-           return ;
+           return newRole();
            case "ADD_EMPLOYEE":
-           return ;
+           return addEmployee();
            case "DELETE_DEPTS":
            return ;
            case "DELETE_ROLES":
@@ -151,7 +151,6 @@ const { departmentId } = await prompt ([
 
 async function findAllRoles () {
     const roles = await db.findAllRoles();
-    console
     console.log("\n");
     console.table(roles);
 
@@ -190,12 +189,53 @@ async function viewEmployees() {
 
 //**************
 //Add Department
+async function newDepartment(){
+const department = await prompt ([
+    { name: "deptname",
+    message: "Enter the name of the new department"
+ }
+]);
+await db.newDepartment(department);
+
+console.log(`Added ${department.deptname} to the system`);
+
+loadMenu();
+ }
 
 
 
 
 //***********************
 //Add Role
+async function newRole(){
+const departments = await db.findAllDepts();
+
+const deptChoices = departments.map(({ deptid, deptname }) => ({
+    name: deptname,
+    value: deptid
+}));
+
+
+    const role = await prompt ([
+        { name: "roletitle",
+        message: "Enter the title of the new role"
+    },
+    { name: "rolesalary",
+    message: "Enter the salary for this role"
+},
+{
+    type: "list",
+    name: "dept_id",
+    message: "Select the department for this role",
+    choices: deptChoices
+
+        }
+    ]);
+    await db.newRole(role);
+    console.log(`Added ${role.roletitle} to the system`);
+
+    loadMenu();
+}
 
 
 
@@ -209,6 +249,56 @@ async function viewEmployees() {
 //then add manager id
 
 //confirmation statement
+
+async function addEmployee() {
+    const roles = await db.findAllRoles();
+    const employees = await db.findAllEmployees();
+
+    const employee = await prompt ([
+        {
+            name: "firstname",
+            message: "Enter the new employee's first name"
+        },
+        { name: "lastname",
+        message: "Enter the new employee's last name"
+    },
+    ]);
+
+    const roleChoices = roles.map(({ roleid, roletitle }) => ({
+        name: roletitle,
+        value: roleid,
+    }));
+    const {roleid } = await prompt ({
+        type: "list",
+        name: "roleid",
+        message: "Select the new employee's role",
+        choices: roleChoices
+    });
+    employee.emp_roleid = roleid;
+
+    const managerList = employees.map (({ empid, firstname, lastname }) => ({
+        name: `${firstname} ${lastname}`,
+        value: empid
+    }));
+    managerList.unshift({name: "None", value: null });
+
+    const { managerid } = await prompt ({
+        type: "list",
+        name: "managerid", 
+        message: "Select the name of the employee's manager",
+        choices: managerList
+    });
+
+    employee.managerid = managerid;
+
+    await db.newEmployee(employee);
+
+    console.log(
+        `Added ${employee.firstname} ${employee.lastname} to the system`);
+
+        loadMenu();
+    }
+
 
 
 
