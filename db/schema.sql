@@ -1,8 +1,5 @@
 /*schema file with 3 basic tables; foreign keys to connect the department id to the role and another foreign key to connect the employee table and another foreign key to connect employee id to manager id */
 
-
-
-
 USE sbzk0qvf8zny0h2d;
 
 CREATE TABLE department (
@@ -16,7 +13,7 @@ CREATE TABLE role (
     dept_id INT NOT NULL,
     INDEX dep_index (dept_id),
     FOREIGN KEY (dept_id)
-        REFERENCES department (deptid)
+        REFERENCES department(deptid)
         ON DELETE CASCADE
 );
     

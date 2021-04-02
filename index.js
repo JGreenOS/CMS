@@ -1,14 +1,3 @@
-
-//add employees
-//update employee managers
-//view employees by manager
-//delete department
-//delete role
-//delete employee 
-
-
-//what to do based on choices (switch statements)
-
 const { prompt } = require("inquirer");
 const logo = require("asciiart-logo");
 const db = require("./db");
@@ -171,8 +160,8 @@ async function viewEmployees() {
 //********************
  //Delete Department
 async function deleteDepartment() {
-    const departments = await db.findAllDepts();
-    const deptChoices = departments.map(({ deptid, deptname }) => ({
+    const departmentList = await db.findAllDepts();
+    const deptChoices = departmentList.map(({ deptid, deptname }) => ({
         name: deptname,
         value: deptid
     }));
@@ -180,7 +169,8 @@ async function deleteDepartment() {
 const { departmentId } = await prompt (
         { 
             type: "list",
-            name: "deptid",
+            name: "deptname",
+            value: "deptid",
             message: "Which department would you like to delete WARNING - this will remove roles and employees!",
             choices: deptChoices
             });

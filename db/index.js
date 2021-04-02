@@ -24,7 +24,7 @@ newDepartment (department) {
 
 //remove department
 delDepartment1 (deptid)  {
- return this.connection.query(`DELETE FROM department WHERE deptid = '?'`, deptid);
+ return this.connection.query(`DELETE FROM department WHERE department.deptid = '?'`, deptid);
 }
 
 //add role
