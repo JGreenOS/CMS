@@ -1,6 +1,8 @@
+require('dotenv').config('./.env');
 const { prompt } = require("inquirer");
 const logo = require("asciiart-logo");
 const db = require("./db");
+const { load } = require('dotenv');
 require ("console.table");
 
 init ();
@@ -84,17 +86,17 @@ async function loadMenu () {
         case "VIEW_EMP_DEPTS":
         return findByDept();
         case "VIEW_EMP_MANAGER":
-        return ;
+        return findEmpByManager();
         case "ADD_DEPT":
         return newDepartment();
         case "ADD_ROLE":
         return newRole();
         case "ADD_EMPLOYEE":
         return addEmployee();
-        case "DELETE_DEPT":
-        return deleteDepartment();
-        case "DELETE_ROLES":
-        return;
+        // case "DELETE_DEPT":
+        // return deleteDepartment();
+        // case "DELETE_ROLES":
+        // return deleterole();
         case "DELETE_EMPLOYEE":
         return deleteEmployee();
         default:
@@ -106,27 +108,10 @@ async function loadMenu () {
 //View All Departments
 async function findAllDepts () {
 const departments = await db.findAllDepts();
+console.log('\n');
+console.table(departments)
 
-const deptChoices = departments.map(({ deptid, deptname }) => ({
-    name: deptname,
-    value: deptid
-}));
-
-const { departmentId } = await prompt ([
-    { 
-        type: "list",
-        name: "departmentId",
-        message: "Which department would you like to view?",
-        choices: deptChoices
-        }]);
-
-        const employees = await db.findAllEmployees(departmentId);
-
-        console.log ("\n");
-        console.table(employees);
-
-        loadMenu();
-
+loadMenu();
 }
 
 //View All Roles
@@ -146,8 +131,57 @@ async function viewEmployees() {
     loadMenu();
 }
 //View Employees by Manager
+async function findEmpByManager(){
+    const managers = await db.findAllEmployees();
+
+    const managerChoices = managers.map(({ empid, firstname, lastname }) => ({
+        name: `${firstname} ${lastname}`,
+        value: empid,
+    }));
+
+    const { managerId } = await prompt ([
+        {
+        type: "list",
+        name: "managerId",
+        message: "Which manager do you want to see the list of employees?",
+        choices: managerChoices
+        }
+    ]);
+    const employees = await db.findEmpByManager(managerId);
+   
+    if (employees.length === 0) {
+        console.log("The selected employee is not assigned as a manager");
+    }
+            else {
+                console.table(employees);
+            }
+            loadMenu();
+        }
 
 //View Employees by Department
+
+async function findByDept(){
+    const departments = await db.findAllDepts();
+
+const deptChoices = departments.map(({ deptid, deptname}) => ({
+    name: `${deptname}`,
+    value: deptid
+}));
+
+const { deptid } = await prompt ([
+    {
+        type:"number",
+        name: "deptid",
+        message: "Select the department number to filter",
+        choices: deptChoices
+    }
+]);
+const employees = await db.findEmpbyDept(deptid);
+console.log("\n");
+console.table(employees);
+
+loadMenu();
+}
 
 
 //***
@@ -159,53 +193,74 @@ async function viewEmployees() {
  
 //********************
  //Delete Department
-async function deleteDepartment() {
-    const departmentList = await db.findAllDepts();
-    const deptChoices = departmentList.map(({ deptid, deptname }) => ({
-        name: deptname,
-        value: deptid
-    }));
+// async function deleteDepartment() {
+//     const departmentList = await db.findAllDepts();
+//     const deptChoices = departmentList.map(({ deptid, deptname }) => ({
+//         name: deptname,
+//         value: deptid,
+//     }));
     
-const { departmentId } = await prompt (
-        { 
-            type: "list",
-            name: "deptname",
-            value: "deptid",
-            message: "Which department would you like to delete WARNING - this will remove roles and employees!",
-            choices: deptChoices
-            });
-        
-await db.delDepartment1(departmentId);
+// const {deptid} = await prompt ([
+//         { 
+//             type: "number",
+//             name: "deptid",
+//             message: "Which department would you like to delete WARNING - this will remove roles and employees!",
+//             choices: deptChoices
+//         },
+// ],)          
+// await db.delDepartment1(deptid);
 
-       console.log(`Removed department from the system`);
-
-       loadMenu();
-    }
+//        console.log(`Removed department from the system`);
+//        console.log("deletd dept with id:" + deptid);
+//        loadMenu();
+//     }
 
  
  //************
  //Delete Roles
 
+//  async function deleterole(){
+//      const role = await db.findAllRoles();
+//      const roleList = role.map(({ roleid, roletitle}) => ({
+//          name: roletitle,
+//          value: roleid,
+//      }));
+
+//      const {roleid} = await prompt ([
+//          {
+//              type: "number",
+//              name: "roleid",
+//              message: "Select the role id to delete",
+//              choices: roleList
+//          },
+//         ],
+//      )
+// console.log("rolenumber", roleid);
+// await db.delRole(roleid),
+
+// loadMenu();
+//     }
  //***********
  //Delete Employees
 async function deleteEmployee() {
 const employee = await db.findAllEmployees();
 const employeeList = employee.map(({ empid, firstname, lastname }) => ({
-    name: `${firstname}  ${lastname} `,
-    value: empid, 
+    name: `${empid} ${firstname}  ${lastname} `,
+    value: `${empid}`, 
 }));
 
-const { employeeId } = await prompt ([
+const {empid} = await prompt ([
     {
-        type: "list",
+        type:"number",
         name: "empid",
-        message: "Select the employee to delete",
+        message: "Select the employee number to delete",
         choices: employeeList
-    }
-]);
+    },
+],
+)
+console.log("employeenumber", empid);
+await db.delEmployee(empid),
 
- await db.delEmployee(employeeId);
- console.log(`Removed employee from the system`);
 
 loadMenu();
 }
@@ -222,7 +277,7 @@ await db.newDepartment(department);
 console.log(`Added ${department.deptname} to the system`);
 
 loadMenu();
- }
+ };
 //***********************
 //Add Role
 async function newRole(){
@@ -255,15 +310,6 @@ const deptChoices = departments.map(({ deptid, deptname }) => ({
 }
 //*******************************            
 //Add Employee 
-//needs to return roles and all employees
-//prompt for first name, last name
-
-//then in roles, prompt for role
-
-//then add manager id
-
-//confirmation statement
-
 async function addEmployee() {
     const roles = await db.findAllRoles();
     const employees = await db.findAllEmployees();
