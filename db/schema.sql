@@ -1,10 +1,11 @@
 /*schema file with 3 basic tables; foreign keys to connect the department id to the role and another foreign key to connect the employee table and another foreign key to connect employee id to manager id */
 
 USE sbzk0qvf8zny0h2d;
-
+SET FOREIGN_KEY_CHECKS=0;
 CREATE TABLE department (
     deptid INT AUTO_INCREMENT PRIMARY KEY,
-    deptname VARCHAR(30) NOT NULL
+    deptname VARCHAR(30)
+
 );
 CREATE TABLE role (
     roleid INT AUTO_INCREMENT PRIMARY KEY,

@@ -5,7 +5,7 @@ class DB {
    }
 
 findAllDepts() {
-return this.connection.query(`SELECT * FROM department`);
+return this.connection.query("SELECT deptid, deptname FROM department");
 }
 
 findAllEmployees() {
@@ -23,10 +23,9 @@ newDepartment (department) {
 }
 
 //remove department
-delDepartment1 (deptid)  {
- return this.connection.query(`DELETE FROM department WHERE department.deptid = '?'`, deptid);
+delDepartment1(deptid)  {
+ return this.connection.query("DELETE FROM `department` WHERE `deptid` = '?'", deptid);
 
-console.log("deleting department with id: " + deptid)
 }
 //add role
 newRole(role) {
@@ -39,7 +38,7 @@ return this.connection.query("INSERT INTO employee SET ?", employee);
 
 //remove employee and use id!
 delEmployee(empid) {
- return this.connection.query("DELETE FROM employee WHERE empid = '?'", empid);
+ return this.connection.query("DELETE FROM `employee` WHERE `empid` = '?'", empid);
 
 }
 
@@ -47,21 +46,24 @@ delEmployee(empid) {
 
 
 //view employee by manager
-
-
+findEmpByManager(managerid) {
+    return this.connection.query("SELECT employee.empid, employee.firstname, employee.lastname, department.deptname AS department, role.roletitle FROM employee LEFT JOIN role on role.roleid = employee.emp_roleid LEFT JOIN department on deptid = role.dept_id WHERE managerid = '?'", managerid);
+}
 
 
 //delete role
-
+delRole(roleid) {
+    return this.connection.query("DELETE FROM `role` WHERE `roleid` = '?'", roleid);
+}
 
 //delete employees
 
 
 //view total salary budget for a specific department
-findByDept()
+findEmpbyDept(deptid)
 {
-    return this.connection.query(`SELECT employee.empid, employee.firstname, employee.lastname, role.roletitle FROM employee LEFT JOIN role on employee.emp_roleid = roleid LEFT JOIN department on role.dept_id = department.deptid WHERE department.deptid = '?'`,
-    deptid);
+    return this.connection.query("SELECT employee.empid, employee.firstname, employee.lastname, department.deptname, department.deptid, role.roletitle FROM employee LEFT JOIN role on employee.emp_roleid = roleid LEFT JOIN department on role.dept_id = department.deptid WHERE deptid = '?'", deptid);
 }
+
 }
 module.exports = new DB(require('./connection'))
