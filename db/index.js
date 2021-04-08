@@ -3,16 +3,15 @@ class DB {
    constructor(connection) {
    this.connection = connection;
    }
-
+//find all departments
 findAllDepts() {
 return this.connection.query("SELECT deptid, deptname FROM department");
 }
-
+//find all employees with salary
 findAllEmployees() {
-return this.connection.query(`SELECT employee.empid, employee.firstname, employee.lastname, role.roletitle, department.deptname FROM employee JOIN
-role ON employee.emp_roleid = role.roleid JOIN department ON department.deptid = role.dept_id`);
+return this.connection.query("SELECT employee.empid, employee.firstname, employee.lastname, role.roletitle, department.deptname AS department, role.rolesalary FROM employee LEFT JOIN role on employee.emp_roleid = role.roleid LEFT JOIN department on role.dept_id = deptid");
 }
-
+//find all roles
 findAllRoles() {
     return this.connection.query(`SELECT * FROM role`);
 }
@@ -42,7 +41,11 @@ delEmployee(empid) {
 
 }
 
-//update managers
+//update employee role
+updateEmpRole(empid, emp_roleid){
+return this.connection.query("UPDATE `employee` SET `emp_roleid` = '?'", [empid, emp_roleid]
+);
+}
 
 
 //view employee by manager

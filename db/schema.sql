@@ -1,7 +1,9 @@
 /*schema file with 3 basic tables; foreign keys to connect the department id to the role and another foreign key to connect the employee table and another foreign key to connect employee id to manager id */
-
+DROP DATABASE IF EXISTS sbzk0qvf8zny0h2d;
+CREATE database sbzk0qvf8zny0h2d;
 USE sbzk0qvf8zny0h2d;
 SET FOREIGN_KEY_CHECKS=0;
+
 CREATE TABLE department (
     deptid INT AUTO_INCREMENT PRIMARY KEY,
     deptname VARCHAR(30)

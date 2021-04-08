@@ -42,6 +42,10 @@ async function loadMenu () {
                    name: "View Employees by Manager",
                    value: "VIEW_EMP_MANAGER"
                },
+               {
+                    name: "Change employee role",
+                    value: "CHANGE_EMP_ROLE"
+               },
                 {
                     name: "Add Department",
                     value: "ADD_DEPT"
@@ -93,6 +97,8 @@ async function loadMenu () {
         return newRole();
         case "ADD_EMPLOYEE":
         return addEmployee();
+        case "CHANGE_EMP_ROLE":
+        return updateEmpRole();
         // case "DELETE_DEPT":
         // return deleteDepartment();
         // case "DELETE_ROLES":
@@ -186,7 +192,45 @@ loadMenu();
 
 //***
 //Update employee role
+async function updateEmpRole() {
+    const employees = await db.findAllEmployees();
 
+    const employeeChoices = employees.map(({ empid, firstname, lastname }) => ({
+        name: `${firstname} ${lastname}`,
+        value: empid
+    }));
+
+    const {empid} = await prompt ([
+        {
+            type:"list",
+            name: "empid",
+            message: "Select the employee to update their role",
+            choices: employeeChoices
+        }
+    ]);
+
+    const roles = await db.findAllRoles();
+    const roleChoices = roles.map(({ roleid, roletitle }) => ({
+        name: roletitle,
+        value: roleid
+    }));
+
+    const {emp_roleid} = await prompt ([
+        {
+            type:"list",
+            name:"emp_roleid",
+            message: "Select the role to assign to this employee",
+            choices: roleChoices
+        }
+    ]);
+    
+    await db.updateEmpRole(empid, emp_roleid);
+
+    console.log("Updated employee role");
+
+    loadMenu();
+}
+    
 //***********
 //Update Employee Manager
  
