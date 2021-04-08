@@ -53,7 +53,7 @@ How do you deliver this? Here are some guidelines:
 * Console Table
 * ASCII-Art
 
-![Employee Tracker](Assets/employee-tracker.gif)
+![Employee Tracker](https://drive.google.com/file/d/1aMl2sysPh_rDdUZl1pBkTOfdZzga0me1/view?usp=sharing)
 
 
 ## Minimum Requirements
